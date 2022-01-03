@@ -40,14 +40,14 @@ class SqfliteInstance {
     return await db.query(tableName!);
   }
 
-  // Future<int> update({Map<String, dynamic>? map, String? tableName}) async {
-  //   Database db = await instance.database;
-  //   int id = map!['id'];
-  //   return await db.update(tableName!, map, where: 'id = ?', whereArgs: [id]);
-  // }
+  Future<int> update({Map<String, dynamic>? map, String? tableName}) async {
+    Database db = await instance.database;
+    int id = map!['id'];
+    return await db.update(tableName!, map, where: 'id = ?', whereArgs: [id]);
+  }
 
-  // Future<int> delete({int? id, String? tableName}) async {
-  //   Database db = await instance.database;
-  //   return await db.delete(tableName!, where: 'id = ?', whereArgs: [id]);
-  // }
+  Future<int> delete({int? id, String? tableName}) async {
+    Database db = await instance.database;
+    return await db.delete(tableName!, where: 'id = ?', whereArgs: [id]);
+  }
 }

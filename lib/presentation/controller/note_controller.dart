@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 class NoteController extends GetxController {
   final GetAllNoteUseCase? getAllNoteUseCase;
   final AddNoteUseCase? addNoteUseCase;
+  final UpdateNoteUseCase? updateNoteUseCase;
+  final DeleteNoteUseCase? deleteNoteUseCase;
 
   var listNote = RxList<NoteModel>();
   late NoteModel selectedNote;
@@ -19,7 +21,12 @@ class NoteController extends GetxController {
   NoteController({
     this.getAllNoteUseCase,
     this.addNoteUseCase,
+    this.updateNoteUseCase,
+    this.deleteNoteUseCase,
   });
+  editNote(NoteModel model) {
+    selectedNote = model;
+  }
 
   selectNote(NoteModel model) {
     selectedNote = model;
@@ -41,5 +48,22 @@ class NoteController extends GetxController {
     listNote.add(model.copyWith(id: recordId));
 
     return recordId;
+  }
+
+  Future<int> updateData(NoteModel model) async {
+    var recordId = await updateNoteUseCase!.call(model);
+
+    var id = listNote.indexWhere((x) => x.id == model.id);
+    listNote[id] = model;
+
+    return recordId;
+  }
+
+  Future<int> deleteData(int recordId) async {
+    var id = await deleteNoteUseCase!.call(recordId);
+
+    listNote.removeWhere((x) => x.id == recordId);
+
+    return id;
   }
 }

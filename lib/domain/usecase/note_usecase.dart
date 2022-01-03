@@ -26,3 +26,27 @@ class AddNoteUseCase extends UseCaseFuture<int, NoteModel> {
     return id;
   }
 }
+
+class UpdateNoteUseCase extends UseCaseFuture<int, NoteModel> {
+  final INoteRepository? noteRepository;
+
+  UpdateNoteUseCase({this.noteRepository});
+
+  @override
+  Future<int> call(NoteModel params) async {
+    var id = await noteRepository!.updateNote(params);
+    return id;
+  }
+}
+
+class DeleteNoteUseCase extends UseCaseFuture<int, int> {
+  final INoteRepository? noteRepository;
+
+  DeleteNoteUseCase({this.noteRepository});
+
+  @override
+  Future<int> call(int params) async {
+    var id = await noteRepository!.deleteNote(params);
+    return id;
+  }
+}

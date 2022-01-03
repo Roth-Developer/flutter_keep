@@ -18,7 +18,9 @@ class NoteDataSource extends INoteDataSource {
 
   @override
   Future<int> deleteNote(int recordId) async {
-    return 1;
+    var id = await SqfliteInstance.instance
+        .delete(tableName: NoteModel.tableName, id: recordId);
+    return id;
   }
 
   @override
@@ -34,7 +36,9 @@ class NoteDataSource extends INoteDataSource {
 
   @override
   Future<int> updateNote(NoteModel model) async {
-    return 1;
+    var id = await SqfliteInstance.instance
+        .update(map: model.toMap(), tableName: NoteModel.tableName);
+    return id;
   }
   // List<NoteModel> listNote = [
   //   NoteModel(

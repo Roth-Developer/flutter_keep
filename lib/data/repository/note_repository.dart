@@ -18,4 +18,16 @@ class NoteRepository extends INoteRepository {
     List<NoteModel> listCustomer = await noteDataSource!.readNote();
     return listCustomer;
   }
+
+  @override
+  Future<int> deleteNote(int recordId) async {
+    var id = await noteDataSource!.deleteNote(recordId);
+    return id;
+  }
+
+  @override
+  Future<int> updateNote(NoteModel model) async {
+    var id = await noteDataSource!.updateNote(model);
+    return id;
+  }
 }
