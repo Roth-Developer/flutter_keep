@@ -1,0 +1,4 @@
+enum TransactionAction {
+  add,
+  edit,
+}

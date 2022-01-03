@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keep_google/core/enum/transaction_action_enum.dart';
 import 'package:flutter_keep_google/data/model/note_model.dart';
 import 'package:flutter_keep_google/presentation/controller/note_controller.dart';
 import 'package:flutter_keep_google/presentation/widget/my_textfield.dart';
 import 'package:get/get.dart';
 
 class AddNoteScreen extends StatefulWidget {
-  const AddNoteScreen({Key? key}) : super(key: key);
+  const AddNoteScreen({
+    Key? key,
+    required this.transactionAction,
+  }) : super(key: key);
+
+  final TransactionAction transactionAction;
 
   @override
   State<AddNoteScreen> createState() => _AddNoteScreenState();
@@ -25,6 +31,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     fnTitle = FocusNode();
     fnNote = FocusNode();
     fnNote.requestFocus();
+
+    if (widget.transactionAction == TransactionAction.add) {
+      fnNote.requestFocus();
+    } else {
+      tecTitle.text = noteController.selectedNote.title!;
+      tecNote.text = noteController.selectedNote.note!;
+    }
     super.initState();
   }
 

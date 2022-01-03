@@ -79,9 +79,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     itemCount: noteController.listNote.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return NoteIteam(
-                        title: noteController.listNote[index].title,
-                        description: noteController.listNote[index].note,
+                      return GestureDetector(
+                        onTap: () {
+                          noteController.editNote(
+                            noteController.listNote[index],
+                          );
+                        },
+                        child: NoteIteam(
+                          title: noteController.listNote[index].title,
+                          description: noteController.listNote[index].note,
+                        ),
                       );
                     },
                     staggeredTileBuilder: (int index) =>
@@ -136,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.toNamed(AppRoute.addNote);
+            Get.to(AppRoute.addNote);
           },
           backgroundColor: Colors.white,
           child: const Icon(
