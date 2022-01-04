@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keep_google/core/constant/app_route.dart';
+import 'package:flutter_keep_google/core/enum/transaction_action_enum.dart';
+import 'package:flutter_keep_google/presentation/screen/note.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_keep_google/presentation/controller/note_controller.dart';
 import 'package:flutter_keep_google/presentation/widget/note_iteam.dart';
@@ -79,16 +81,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     itemCount: noteController.listNote.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
+                      return NoteIteam(
+                        title: noteController.listNote[index].title,
+                        description: noteController.listNote[index].note,
                         onTap: () {
                           noteController.editNote(
                             noteController.listNote[index],
                           );
+                          Get.to(const NoteScreen(
+                            transactionAction: TransactionAction.edit,
+                          ));
                         },
-                        child: NoteIteam(
-                          title: noteController.listNote[index].title,
-                          description: noteController.listNote[index].note,
-                        ),
                       );
                     },
                     staggeredTileBuilder: (int index) =>
@@ -143,7 +146,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.to(AppRoute.addNote);
+            Get.to(
+              const NoteScreen(
+                transactionAction: TransactionAction.add,
+              ),
+            );
           },
           backgroundColor: Colors.white,
           child: const Icon(

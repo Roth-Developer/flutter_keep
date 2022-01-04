@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keep_google/core/enum/transaction_action_enum.dart';
-import 'package:flutter_keep_google/presentation/screen/add_note_screen.dart';
+import 'package:flutter_keep_google/presentation/screen/note.dart';
 
 import 'package:flutter_keep_google/presentation/screen/home_screen.dart';
 import 'package:get/get.dart';
@@ -29,12 +29,6 @@ class App extends StatelessWidget {
         GetPage(
           name: AppRoute.home,
           page: () => const HomeScreen(),
-        ),
-        GetPage(
-          name: AppRoute.addNote,
-          page: () => const AddNoteScreen(
-            transactionAction: TransactionAction.add,
-          ),
         ),
       ],
     );

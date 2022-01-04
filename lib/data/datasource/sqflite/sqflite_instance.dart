@@ -20,7 +20,7 @@ class SqfliteInstance {
   _initDB() async {
     Directory directory = await getApplicationDocumentsDirectory();
 
-    String path = directory.path + 'db2.db';
+    String path = directory.path + 'db1.db';
     return await openDatabase(path, version: 1, onCreate: _onCreateDB);
   }
 
