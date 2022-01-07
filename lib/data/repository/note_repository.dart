@@ -15,8 +15,8 @@ class NoteRepository extends INoteRepository {
 
   @override
   Future<List<NoteModel>> getAllNote() async {
-    List<NoteModel> listCustomer = await noteDataSource!.readNote();
-    return listCustomer;
+    List<NoteModel> listNote = await noteDataSource!.readNote();
+    return listNote;
   }
 
   @override

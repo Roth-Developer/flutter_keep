@@ -4,8 +4,14 @@ class NoteIteam extends StatelessWidget {
   final String? title;
   final String? description;
   final Function() onTap;
+  final Color color;
 
-  const NoteIteam({Key? key, this.title, this.description, required this.onTap})
+  const NoteIteam(
+      {Key? key,
+      this.title,
+      this.description,
+      required this.onTap,
+      required this.color})
       : super(key: key);
 
   @override
@@ -13,6 +19,7 @@ class NoteIteam extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        color: color,
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.all(8.0),

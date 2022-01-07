@@ -24,11 +24,21 @@ class MainBinding extends Bindings {
       AddNoteUseCase(noteRepository: Get.find()),
       permanent: true,
     );
+    Get.put<UpdateNoteUseCase?>(
+      UpdateNoteUseCase(noteRepository: Get.find()),
+      permanent: true,
+    );
+    Get.put<DeleteNoteUseCase?>(
+      DeleteNoteUseCase(noteRepository: Get.find()),
+      permanent: true,
+    );
 
     Get.put(
       NoteController(
         getAllNoteUseCase: Get.find(),
         addNoteUseCase: Get.find(),
+        updateNoteUseCase: Get.find(),
+        deleteNoteUseCase: Get.find(),
       ),
       permanent: true,
     );

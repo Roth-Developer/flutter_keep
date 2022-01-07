@@ -1,3 +1,4 @@
+import 'package:flutter_keep_google/data/model/colors_model.dart';
 import 'package:flutter_keep_google/data/model/note_model.dart';
 import 'package:flutter_keep_google/domain/entity/no_param.dart';
 import 'package:flutter_keep_google/domain/usecase/note_usecase.dart';
@@ -10,12 +11,18 @@ class NoteController extends GetxController {
   final DeleteNoteUseCase? deleteNoteUseCase;
 
   var listNote = RxList<NoteModel>();
+  var listColor = RxList<ColorModel>();
   late NoteModel selectedNote;
   var isLoading = false.obs;
 
   var blankNote = NoteModel(
     title: '',
     note: '',
+    dateTime: DateTime.now(),
+    color: '',
+    // tag: '',
+    // pin: false,
+    // status: '',
   );
 
   NoteController({
@@ -45,7 +52,14 @@ class NoteController extends GetxController {
   Future<int> saveData(NoteModel model) async {
     var recordId = await addNoteUseCase!.call(model);
 
-    listNote.add(model.copyWith(id: recordId));
+    listNote.add(model.copyWith(
+      id: recordId,
+      dateTime: DateTime.now(),
+      pin: model.pin,
+      color: model.color,
+      col: model.col,
+    ));
+    // pin: model.pin))
 
     return recordId;
   }

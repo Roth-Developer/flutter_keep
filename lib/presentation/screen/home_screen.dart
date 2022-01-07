@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keep_google/core/constant/app_color.dart';
 import 'package:flutter_keep_google/core/constant/app_route.dart';
 import 'package:flutter_keep_google/core/enum/transaction_action_enum.dart';
 import 'package:flutter_keep_google/presentation/screen/note.dart';
@@ -82,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: noteController.listNote.length,
                     itemBuilder: (BuildContext context, int index) {
                       return NoteIteam(
+                        color: noteController.listNote[index].col!,
                         title: noteController.listNote[index].title,
                         description: noteController.listNote[index].note,
                         onTap: () {
