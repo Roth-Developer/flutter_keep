@@ -166,43 +166,46 @@ class _NoteScreenState extends State<NoteScreen> {
                 IconButton(
                   onPressed: () {
                     Get.bottomSheet(
-                      Container(
-                        height: 200,
-                        color: selectedColor.color,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Color'),
-                              Row(
-                                children: AppColor.listNoteBackGroundColor
-                                    .map((x) => Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedColor = ColorModel(
-                                                    code: x.code,
-                                                    color: x.color);
-                                              });
-                                            },
-                                            child: CircleAvatar(
-                                                radius: 15,
-                                                backgroundColor: x.color,
-                                                child: selectedColor.code ==
-                                                        x.code
-                                                    ? const Text('a')
-                                                    : const SizedBox.shrink()),
-                                          ),
-                                        ))
-                                    .toList(),
-                              )
-                            ],
+                        Container(
+                          height: 200,
+                          color: selectedColor.color,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Color'),
+                                Row(
+                                  children: AppColor.listNoteBackGroundColor
+                                      .map((x) => Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  selectedColor = ColorModel(
+                                                      code: x.code,
+                                                      color: x.color);
+                                                });
+                                              },
+                                              child: CircleAvatar(
+                                                  radius: 15,
+                                                  backgroundColor: x.color,
+                                                  child: selectedColor.code ==
+                                                          x.code
+                                                      ? const Text('a')
+                                                      : const SizedBox
+                                                          .shrink()),
+                                            ),
+                                          ))
+                                      .toList(),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
+                        barrierColor: selectedColor.color,
+                        persistent: false,
+                        elevation: 8);
                   },
                   icon: const Icon(Icons.av_timer_outlined),
                 ),
