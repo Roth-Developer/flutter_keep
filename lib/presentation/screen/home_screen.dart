@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: CustomScrollView(
-          scrollDirection: Axis.vertical,
           slivers: [
             const SliverAppBar(),
             SliverToBoxAdapter(
@@ -83,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Obx(() => Flexible(
                     fit: FlexFit.loose,
                     child: StaggeredGridView.countBuilder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       crossAxisCount: 2,
                       itemCount: noteController.listNotePin.length,
@@ -112,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fit: FlexFit.loose,
                     child: StaggeredGridView.countBuilder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
                       itemCount: noteController.listNoteUnPin.length,
                       itemBuilder: (BuildContext context, int index) {
