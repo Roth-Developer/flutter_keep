@@ -14,6 +14,8 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: TextInputType.multiline,
+      maxLines: null,
       focusNode: focusNode,
       controller: controller,
       cursorColor: Colors.black,

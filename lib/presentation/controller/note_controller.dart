@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_keep_google/data/model/colors_model.dart';
 import 'package:flutter_keep_google/data/model/note_model.dart';
 import 'package:flutter_keep_google/domain/entity/no_param.dart';
@@ -9,8 +10,10 @@ class NoteController extends GetxController {
   final AddNoteUseCase? addNoteUseCase;
   final UpdateNoteUseCase? updateNoteUseCase;
   final DeleteNoteUseCase? deleteNoteUseCase;
-
-  var listNote = RxList<NoteModel>();
+  var selectedColor = Rx<Color>(Colors.white);
+  var listNotePin = RxList<NoteModel>();
+  var listNoteUnPin = RxList<NoteModel>();
+  var listNoteAll = RxList<NoteModel>();
   var listColor = RxList<ColorModel>();
   late NoteModel selectedNote;
   var isLoading = false.obs;
@@ -19,7 +22,8 @@ class NoteController extends GetxController {
     title: '',
     note: '',
     dateTime: DateTime.now(),
-    color: '',
+
+    colorInt: 0,
     // tag: '',
     // pin: false,
     // status: '',
@@ -37,27 +41,33 @@ class NoteController extends GetxController {
 
   selectNote(NoteModel model) {
     selectedNote = model;
-    listNote.refresh();
+    listNoteAll.refresh();
   }
 
-  loadNote() async {
+  selectColor(Color color) {
+    selectedColor.value = color;
+    selectedColor.refresh();
+  }
+
+  loadNoteAll() async {
     isLoading.value = true;
     selectedNote = blankNote;
-    listNote.clear();
+    listNoteAll.clear();
     var list = await getAllNoteUseCase!.call(NoParam());
-    listNote.assignAll(list);
+    listNoteAll.assignAll(list);
+    listNotePin.assignAll(listNoteAll.where((x) => x.pin == true));
+    listNoteUnPin.assignAll(listNoteAll.where((x) => x.pin == false));
     isLoading.value = false;
   }
 
   Future<int> saveData(NoteModel model) async {
     var recordId = await addNoteUseCase!.call(model);
 
-    listNote.add(model.copyWith(
+    listNoteAll.add(model.copyWith(
       id: recordId,
       dateTime: DateTime.now(),
       pin: model.pin,
-      color: model.color,
-      col: model.col,
+      colorint: model.colorInt,
     ));
     // pin: model.pin))
 
@@ -67,8 +77,8 @@ class NoteController extends GetxController {
   Future<int> updateData(NoteModel model) async {
     var recordId = await updateNoteUseCase!.call(model);
 
-    var id = listNote.indexWhere((x) => x.id == model.id);
-    listNote[id] = model;
+    var id = listNoteAll.indexWhere((x) => x.id == model.id);
+    listNoteAll[id] = model;
 
     return recordId;
   }
@@ -76,7 +86,7 @@ class NoteController extends GetxController {
   Future<int> deleteData(int recordId) async {
     var id = await deleteNoteUseCase!.call(recordId);
 
-    listNote.removeWhere((x) => x.id == recordId);
+    listNoteAll.removeWhere((x) => x.id == recordId);
 
     return id;
   }

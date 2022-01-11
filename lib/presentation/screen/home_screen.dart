@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    noteController.loadNote();
+    noteController.loadNoteAll();
     super.initState();
   }
 
@@ -32,10 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
+        body: CustomScrollView(
+          scrollDirection: Axis.vertical,
+          slivers: [
+            const SliverAppBar(),
+            SliverToBoxAdapter(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 child: Container(
                   height: 50,
@@ -76,33 +78,64 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Obx(
-                () => Expanded(
-                  child: StaggeredGridView.countBuilder(
-                    crossAxisCount: 2,
-                    itemCount: noteController.listNote.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return NoteIteam(
-                        color: noteController.listNote[index].col!,
-                        title: noteController.listNote[index].title,
-                        description: noteController.listNote[index].note,
-                        onTap: () {
-                          noteController.editNote(
-                            noteController.listNote[index],
-                          );
-                          Get.to(const NoteScreen(
-                            transactionAction: TransactionAction.edit,
-                          ));
-                        },
-                      );
-                    },
-                    staggeredTileBuilder: (int index) =>
-                        const StaggeredTile.fit(1),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+            SliverToBoxAdapter(
+              child: Obx(() => Flexible(
+                    fit: FlexFit.loose,
+                    child: StaggeredGridView.countBuilder(
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      itemCount: noteController.listNotePin.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return NoteIteam(
+                          color:
+                              Color(noteController.listNotePin[index].colorInt),
+                          title: noteController.listNotePin[index].title,
+                          description: noteController.listNotePin[index].note,
+                          onTap: () {
+                            noteController.editNote(
+                              noteController.listNotePin[index],
+                            );
+                            Get.to(const NoteScreen(
+                              transactionAction: TransactionAction.edit,
+                            ));
+                          },
+                        );
+                      },
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(1),
+                    ),
+                  )),
+            ),
+            SliverToBoxAdapter(
+              child: Obx(() => Flexible(
+                    fit: FlexFit.loose,
+                    child: StaggeredGridView.countBuilder(
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      itemCount: noteController.listNoteUnPin.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return NoteIteam(
+                          color: Color(
+                              noteController.listNoteUnPin[index].colorInt),
+                          title: noteController.listNoteUnPin[index].title,
+                          description: noteController.listNoteUnPin[index].note,
+                          onTap: () {
+                            noteController.editNote(
+                              noteController.listNoteUnPin[index],
+                            );
+                            Get.to(const NoteScreen(
+                              transactionAction: TransactionAction.edit,
+                            ));
+                          },
+                        );
+                      },
+                      staggeredTileBuilder: (int index) =>
+                          const StaggeredTile.fit(1),
+                    ),
+                  )),
+            ),
+          ],
         ),
         bottomNavigationBar: BottomAppBar(
           child: Container(

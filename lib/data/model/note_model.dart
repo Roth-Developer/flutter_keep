@@ -12,16 +12,17 @@ class NoteModel {
   static const String columnTag = 'tag';
   static const String columnPin = 'pin';
   static const String columnStatus = 'status';
+  static const String columnColorInt = 'colorint';
 
   final int? id;
   final String? title;
   final String? note;
   final DateTime dateTime;
-  final String color;
-  final Color? col;
+
   // final String? tag;
   final bool pin;
   // final String? status;
+  final int colorInt;
 
   //query string for create table
   static String createTable() {
@@ -33,6 +34,7 @@ class NoteModel {
         $columnColor TEXT,
         $columnTag TEXT,
         $columnPin INTERGER,
+        $columnColorInt INTERGER,
         $columnStatus TEXT)""";
   }
 
@@ -41,10 +43,11 @@ class NoteModel {
     this.title,
     this.note,
     required this.dateTime,
-    required this.color,
+
     // this.tag,
     this.pin = false,
-    this.col,
+    required this.colorInt,
+
     // this.status,
   });
 
@@ -53,9 +56,10 @@ class NoteModel {
       columnTitle: title,
       columnNote: note,
       columnDateTime: dateTime.toIso8601String(),
-      columnColor: color,
+
       // columnTag: tag,
       columnPin: pin == true ? 1 : 0,
+      columnColorInt: colorInt,
       // columnStatus: status,
     };
     if (id != null) {
@@ -65,9 +69,6 @@ class NoteModel {
   }
 
   factory NoteModel.fromMap(Map<String, dynamic> map) {
-    var id = AppColor.listNoteBackGroundColor
-        .indexWhere((x) => x.code == map[columnColor]);
-    var coll = AppColor.listNoteBackGroundColor[id];
     return NoteModel(
       id: map[columnId],
       note: map[columnNote],
@@ -75,9 +76,10 @@ class NoteModel {
       dateTime: DateTime.parse(
         map[columnDateTime],
       ),
-      color: map[columnColor],
+
       pin: map[columnPin] == 1 ? true : false,
-      col: coll.color,
+
+      colorInt: map[columnColorInt],
       // tag: map[columnTag],
       // status: map[columnStatus],
     );
@@ -88,10 +90,10 @@ class NoteModel {
     String? title,
     String? note,
     required DateTime dateTime,
-    required String color,
+
     // String? tag,
     required bool pin,
-    Color? col,
+    int? colorint,
     // String? status,
   }) {
     return NoteModel(
@@ -99,10 +101,11 @@ class NoteModel {
       title: title ?? this.title,
       note: note ?? this.note,
       dateTime: dateTime,
-      color: color,
+
       // tag: tag ?? this.tag,
       pin: pin,
-      col: col,
+
+      colorInt: colorint ?? colorInt,
       // status: status ?? this.status,
     );
   }
