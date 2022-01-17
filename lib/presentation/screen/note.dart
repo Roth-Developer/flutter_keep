@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keep_google/app.dart';
 import 'package:flutter_keep_google/core/constant/app_color.dart';
 import 'package:flutter_keep_google/core/enum/transaction_action_enum.dart';
 import 'package:flutter_keep_google/data/model/colors_model.dart';
@@ -42,6 +43,7 @@ class _NoteScreenState extends State<NoteScreen> {
     if (widget.transactionAction == TransactionAction.add) {
       fnNote.requestFocus();
       isPin = false;
+      noteController.selectedColor.value = Colors.white;
     } else {
       tecTitle.text = noteController.selectedNote.title!;
       tecNote.text = noteController.selectedNote.note!;
@@ -108,119 +110,141 @@ class _NoteScreenState extends State<NoteScreen> {
     return Obx(
       () => Scaffold(
         backgroundColor: noteController.selectedColor.value,
+        appBar: AppBar(
+          backgroundColor: noteController.selectedColor.value,
+          leading: IconButton(
+            onPressed: () {
+              saveData();
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                setPin();
+              },
+              icon: isPin == false
+                  ? const Icon(
+                      Icons.push_pin_outlined,
+                      color: Colors.black,
+                    )
+                  : const Icon(
+                      Icons.push_pin,
+                      color: Colors.black,
+                    ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.alarm_add,
+                color: Colors.black,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.download_for_offline_outlined,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
         body: SafeArea(
-          child: Column(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+                MyTextField(
+                  focusNode: fnTitle,
+                  text: 'Title',
+                  controller: tecTitle,
+                ),
+                MyTextField(
+                  focusNode: fnNote,
+                  text: 'Note',
+                  controller: tecNote,
+                ),
+              ],
+            ),
+          ),
+        ),
+        bottomSheet: Container(
+          color: noteController.selectedColor.value,
+          child: Row(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      saveData();
-                      Get.back();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                    ),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      setPin();
-                    },
-                    icon: isPin == false
-                        ? const Icon(
-                            Icons.push_pin_outlined,
-                          )
-                        : const Icon(Icons.push_pin),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.alarm_add,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.download_for_offline_outlined),
-                  ),
-                ],
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.add_box_outlined),
               ),
-              const SizedBox(height: 30),
-              MyTextField(
-                focusNode: fnTitle,
-                text: 'Title',
-                controller: tecTitle,
-              ),
-              MyTextField(
-                focusNode: fnNote,
-                text: 'Note',
-                controller: tecNote,
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add_box_outlined),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      showMaterialModalBottomSheet(
-                        context: context,
-                        builder: (context) => Obx(
-                          () => Container(
-                            height: 200,
-                            color: noteController.selectedColor.value,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('Color'),
-                                  Row(
-                                    children: AppColor.listNoteBackGroundColor
-                                        .map((x) => Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  noteController.selectColor(x);
-                                                },
-                                                child: CircleAvatar(
-                                                    radius: 15,
-                                                    backgroundColor: x,
-                                                    child: noteController
-                                                                .selectedColor
-                                                                .value ==
-                                                            x
-                                                        ? const Text('a')
-                                                        : const SizedBox
-                                                            .shrink()),
-                                              ),
-                                            ))
-                                        .toList(),
-                                  )
-                                ],
-                              ),
-                            ),
+              IconButton(
+                onPressed: () {
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    builder: (context) => Obx(
+                      () => Container(
+                        height: 200,
+                        color: noteController.selectedColor.value,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Color'),
+                              Row(
+                                children: AppColor.listNoteBackGroundColor
+                                    .map((x) => Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              noteController.selectColor(x);
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 17,
+                                              backgroundColor: noteController
+                                                          .selectedColor
+                                                          .value ==
+                                                      x
+                                                  ? Colors.purple
+                                                  : Colors.transparent,
+                                              child: CircleAvatar(
+                                                  foregroundColor: Colors.black,
+                                                  radius: 15,
+                                                  backgroundColor: x,
+                                                  child: noteController
+                                                              .selectedColor
+                                                              .value ==
+                                                          x
+                                                      ? const Icon(Icons.done)
+                                                      : const SizedBox
+                                                          .shrink()),
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                              )
+                            ],
                           ),
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.av_timer_outlined),
-                  ),
-                  const Spacer(),
-                  widget.transactionAction == TransactionAction.add
-                      ? Text(formatted)
-                      : Text(DateFormat('hh:mm')
-                          .format(noteController.selectedNote.dateTime)),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.menu),
-                  ),
-                ],
-              )
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.av_timer_outlined),
+              ),
+              const Spacer(),
+              widget.transactionAction == TransactionAction.add
+                  ? Text(formatted)
+                  : Text(DateFormat('hh:mm')
+                      .format(noteController.selectedNote.dateTime)),
+              const Spacer(),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.menu),
+              ),
             ],
           ),
         ),
@@ -228,3 +252,69 @@ class _NoteScreenState extends State<NoteScreen> {
     );
   }
 }
+
+// Row(
+//                   children: [
+//                     IconButton(
+//                       onPressed: () {},
+//                       icon: const Icon(Icons.add_box_outlined),
+//                     ),
+//                     IconButton(
+//                       onPressed: () {
+//                         showMaterialModalBottomSheet(
+//                           context: context,
+//                           builder: (context) => Obx(
+//                             () => Container(
+//                               height: 200,
+//                               color: noteController.selectedColor.value,
+//                               child: Padding(
+//                                 padding: const EdgeInsets.all(10.0),
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     const Text('Color'),
+//                                     Row(
+//                                       children: AppColor.listNoteBackGroundColor
+//                                           .map((x) => Padding(
+//                                                 padding:
+//                                                     const EdgeInsets.all(8.0),
+//                                                 child: GestureDetector(
+//                                                   onTap: () {
+//                                                     noteController
+//                                                         .selectColor(x);
+//                                                   },
+//                                                   child: CircleAvatar(
+//                                                       radius: 15,
+//                                                       backgroundColor: x,
+//                                                       child: noteController
+//                                                                   .selectedColor
+//                                                                   .value ==
+//                                                               x
+//                                                           ? const Text('a')
+//                                                           : const SizedBox
+//                                                               .shrink()),
+//                                                 ),
+//                                               ))
+//                                           .toList(),
+//                                     )
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                       icon: const Icon(Icons.av_timer_outlined),
+//                     ),
+//                     const Spacer(),
+//                     widget.transactionAction == TransactionAction.add
+//                         ? Text(formatted)
+//                         : Text(DateFormat('hh:mm')
+//                             .format(noteController.selectedNote.dateTime)),
+//                     const Spacer(),
+//                     IconButton(
+//                       onPressed: () {},
+//                       icon: const Icon(Icons.menu),
+//                     ),
+//                   ],
+//                 // )

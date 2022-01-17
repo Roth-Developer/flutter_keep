@@ -69,7 +69,21 @@ class NoteController extends GetxController {
       pin: model.pin,
       colorint: model.colorInt,
     ));
-    // pin: model.pin))
+    if (model.pin == true) {
+      listNotePin.add(model.copyWith(
+        id: recordId,
+        dateTime: DateTime.now(),
+        pin: model.pin,
+        colorint: model.colorInt,
+      ));
+    } else {
+      listNoteUnPin.add(model.copyWith(
+        id: recordId,
+        dateTime: DateTime.now(),
+        pin: model.pin,
+        colorint: model.colorInt,
+      ));
+    }
 
     return recordId;
   }
@@ -79,6 +93,9 @@ class NoteController extends GetxController {
 
     var id = listNoteAll.indexWhere((x) => x.id == model.id);
     listNoteAll[id] = model;
+
+    listNotePin.assignAll(listNoteAll.where((x) => x.pin == true));
+    listNoteUnPin.assignAll(listNoteAll.where((x) => x.pin == false));
 
     return recordId;
   }

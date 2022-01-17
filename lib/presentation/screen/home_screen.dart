@@ -3,6 +3,7 @@ import 'package:flutter_keep_google/core/constant/app_color.dart';
 import 'package:flutter_keep_google/core/constant/app_route.dart';
 import 'package:flutter_keep_google/core/enum/transaction_action_enum.dart';
 import 'package:flutter_keep_google/presentation/screen/note.dart';
+import 'package:flutter_keep_google/presentation/screen/search_screen.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_keep_google/presentation/controller/note_controller.dart';
 import 'package:flutter_keep_google/presentation/widget/note_iteam.dart';
@@ -32,111 +33,160 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        body: CustomScrollView(
-          slivers: [
-            const SliverAppBar(),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(color: Colors.grey, blurRadius: 5)
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                          ),
-                          const Text('Search your notes')
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.manage_search_rounded),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircleAvatar(),
-                          ),
-                        ],
-                      )
-                    ],
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                floating: true,
+                flexibleSpace: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(color: Colors.grey, blurRadius: 1)
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.menu,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                _scaffoldKey.currentState?.openDrawer();
+                              },
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  Get.to(() => SearchScreen());
+                                },
+                                child: const Text('Search your notes'))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.manage_search_rounded),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircleAvatar(),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: Obx(() => Flexible(
-                    fit: FlexFit.loose,
-                    child: StaggeredGridView.countBuilder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      crossAxisCount: 2,
-                      itemCount: noteController.listNotePin.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return NoteIteam(
-                          color:
-                              Color(noteController.listNotePin[index].colorInt),
-                          title: noteController.listNotePin[index].title,
-                          description: noteController.listNotePin[index].note,
-                          onTap: () {
-                            noteController.editNote(
-                              noteController.listNotePin[index],
-                            );
-                            Get.to(const NoteScreen(
-                              transactionAction: TransactionAction.edit,
-                            ));
-                          },
-                        );
-                      },
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(1),
-                    ),
-                  )),
-            ),
-            SliverToBoxAdapter(
-              child: Obx(() => Flexible(
-                    fit: FlexFit.loose,
-                    child: StaggeredGridView.countBuilder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      itemCount: noteController.listNoteUnPin.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return NoteIteam(
-                          color: Color(
-                              noteController.listNoteUnPin[index].colorInt),
-                          title: noteController.listNoteUnPin[index].title,
-                          description: noteController.listNoteUnPin[index].note,
-                          onTap: () {
-                            noteController.editNote(
-                              noteController.listNoteUnPin[index],
-                            );
-                            Get.to(const NoteScreen(
-                              transactionAction: TransactionAction.edit,
-                            ));
-                          },
-                        );
-                      },
-                      staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(1),
-                    ),
-                  )),
-            ),
-          ],
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    'PINNED',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Obx(() => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: StaggeredGridView.countBuilder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              crossAxisCount: 2,
+                              itemCount: noteController.listNotePin.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return NoteIteam(
+                                  color: Color(noteController
+                                      .listNotePin[index].colorInt),
+                                  title:
+                                      noteController.listNotePin[index].title,
+                                  description:
+                                      noteController.listNotePin[index].note,
+                                  onTap: () {
+                                    noteController.editNote(
+                                      noteController.listNotePin[index],
+                                    );
+                                    Get.to(const NoteScreen(
+                                      transactionAction: TransactionAction.edit,
+                                    ));
+                                  },
+                                );
+                              },
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    'OTHERS',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Obx(() => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: StaggeredGridView.countBuilder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              itemCount: noteController.listNoteUnPin.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return NoteIteam(
+                                  color: Color(noteController
+                                      .listNoteUnPin[index].colorInt),
+                                  title:
+                                      noteController.listNoteUnPin[index].title,
+                                  description:
+                                      noteController.listNoteUnPin[index].note,
+                                  onTap: () {
+                                    noteController.editNote(
+                                      noteController.listNoteUnPin[index],
+                                    );
+                                    Get.to(const NoteScreen(
+                                      transactionAction: TransactionAction.edit,
+                                    ));
+                                  },
+                                );
+                              },
+                              staggeredTileBuilder: (int index) =>
+                                  const StaggeredTile.fit(1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Container(
