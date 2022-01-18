@@ -18,6 +18,9 @@ class NoteController extends GetxController {
   late NoteModel selectedNote;
   var isLoading = false.obs;
 
+  var listSearchNote = RxList<NoteModel>();
+  var listSearchNoteWithColor = RxList<NoteModel>();
+
   var blankNote = NoteModel(
     title: '',
     note: '',
@@ -106,5 +109,53 @@ class NoteController extends GetxController {
     listNoteAll.removeWhere((x) => x.id == recordId);
 
     return id;
+  }
+
+  searchNote(String textSearch) {
+    if (textSearch.trim() == '') {
+      listSearchNote.clear();
+    } else {
+      listSearchNote.assignAll(
+        listNoteAll.where(
+          (x) => (x.note!.toLowerCase().contains(
+                    textSearch.toLowerCase(),
+                  ) ||
+              x.title!.toLowerCase().contains(
+                    textSearch.toLowerCase(),
+                  )),
+        ),
+      );
+    }
+  }
+
+  searchColorNote(int color) {
+    listSearchNote.clear();
+
+    listSearchNote.assignAll(
+      listNoteAll.where(
+        (x) => (x.colorInt == color),
+      ),
+    );
+  }
+
+  searchNoteWithColor(
+      {required int color, required String textSearchWithColor}) {
+    if (textSearchWithColor.trim() == '') {
+      listSearchNoteWithColor
+          .assignAll(listNoteAll.where((x) => (x.colorInt == color)));
+    } else {
+      listSearchNoteWithColor.assignAll(
+        listNoteAll.where(
+          (x) => ((x.note!.toLowerCase().contains(
+                        textSearchWithColor.toLowerCase(),
+                      ) &&
+                  x.colorInt == color) ||
+              (x.title!.toLowerCase().contains(
+                        textSearchWithColor.toLowerCase(),
+                      ) &&
+                  x.colorInt == color)),
+        ),
+      );
+    }
   }
 }

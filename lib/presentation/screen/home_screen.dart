@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             GestureDetector(
                                 onTap: () {
-                                  Get.to(() => SearchScreen());
+                                  Get.to(() => const SearchScreen());
                                 },
                                 child: const Text('Search your notes'))
                           ],
@@ -233,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Get.to(
-              const NoteScreen(
+              () => const NoteScreen(
                 transactionAction: TransactionAction.add,
               ),
             );

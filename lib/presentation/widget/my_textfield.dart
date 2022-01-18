@@ -4,17 +4,20 @@ class MyTextField extends StatelessWidget {
   final String text;
   final TextEditingController controller;
   final FocusNode? focusNode;
+  final Function(String)? onChange;
 
   const MyTextField({
     Key? key,
     required this.text,
     required this.controller,
     this.focusNode,
+    this.onChange,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: onChange,
       keyboardType: TextInputType.multiline,
       maxLines: null,
       focusNode: focusNode,
